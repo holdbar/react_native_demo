@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList} from 're
 
 export default class App extends React.Component {
   state = {
-    title: 'Hello, World',
+    newTask: '',
     tasks: [
       {key:'1', title:'gym'},
       {key:'2', title:'shop'},
@@ -11,30 +11,31 @@ export default class App extends React.Component {
     ]
   }
 
-  handleTitle = (text) => {
-    this.setState({title: text})
+  handleNewTaskName = (text) => {
+    this.setState({newTask: text})
+    
   }
 
-  handleRollback = () => {
-    this.setState({title: ''})
+  handleAddTask = () => {
+    let count = 0
+    nextKey = String(Math.max(...this.state.tasks.map((key, task) => count += 1)))
+    this.setState({tasks:[...this.state.tasks,{key:nextKey, title: this.state.newTask}]})
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{this.state.title}</Text>
+        <Text style={styles.title}>Enter Task</Text>
         <TextInput 
           style={styles.input}
           underlineColorAndroid = "transparent"
           autoCapitalize = "none"
-          value={this.state.title === '' ? '' : this.state.title}
-          onChangeText = {this.handleTitle}
+          onChangeText = {this.handleNewTaskName}
         />
         <TouchableOpacity
           style = {styles.submitButton}
-          onPress = {
-            () => this.setState({title: ''})
-          }>
+          onPress = {this.handleAddTask}
+        >
           <Text style = {styles.submitButtonText}> Rollback </Text>
         </TouchableOpacity>
         <FlatList
